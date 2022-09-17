@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "dev": "DEV_ENV=true nodemon index.js",
+    "dev": "DEV_ENV=true nodemon -e js,ts index.js",
     "type": "tsc",
     "start": "node index.js",
     "build": "babel src --out-dir lib --copy-files --extensions '.ts,.js'"
