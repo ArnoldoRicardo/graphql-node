@@ -1,9 +1,7 @@
-import { Request, Response } from 'express';
+import { testConexion } from './services'
 
 export default class AppController {
-  constructor(private request: Request, private response: Response) {}
-
   async index (): Promise<string> {
-    return 'Hello world'
+    return testConexion()
   }
 }

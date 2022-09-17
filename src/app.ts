@@ -33,6 +33,7 @@ type Query {
     personCount: Int!
     allPerson: [Person]
     findPerson(name: String!): Person
+    testPg: String!
 }
 `
 
@@ -55,6 +56,11 @@ const resolvers = {
             const { name } = args
             console.log(name)
             return persons.find(person => person.name === name)
+        },
+        testPg: () => {
+            const appController = new AppController
+            return appController.index()
+
         }
     },
     Person: {
