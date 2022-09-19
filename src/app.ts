@@ -1,67 +1,41 @@
 import { gql, ApolloServer } from "apollo-server"
-import AppController from './controller'
-
-const persons = [
-    {
-        "name": "juan",
-        "telefono": 1123,
-        "city": 'conocido',
-        'street': 'centro',
-    },
-    {
-        "name": "pedro",
-        "telefono": 1235,
-        "city": 'conocido',
-        'street': 'centro',
-    }
-]
+import { testConexion as testPg, personCount, allPerson, findPerson } from './queries'
 
 
 const typeDefs = gql`
-type Address {
-    city: String!
-    street: String!
-}
+    type Address {
+        city: String!
+        street: String!
+    }
 
-type Person {
-    name: String!
-    telefono: Int!
-    address: Address!
-}
+    type Person {
+        name: String!
+        telefono: String!
+        address: Address!
+    }
 
-type Query {
-    personCount: Int!
-    allPerson: [Person]
-    findPerson(name: String!): Person
-    testPg: String!
-}
+    type Query {
+        personCount: Int!
+        allPerson: [Person]
+        findPerson(name: String!): Person
+        testPg: String!
+    }
 `
 
 type Person =  {
     name: String
-    telefono: number
+    telefono: string
     city: String
     street: String
 }
 
-type findArgs = {
-    name: String
-}
 
 const resolvers = {
     Query: {
-        personCount: () => persons.length,
-        allPerson: () => persons,
-        findPerson: (root: undefined, args: findArgs) => {
-            const { name } = args
-            console.log(name)
-            return persons.find(person => person.name === name)
-        },
-        testPg: () => {
-            const appController = new AppController
-            return appController.index()
-
-        }
+        personCount,
+        allPerson,
+        findPerson,
+        testPg,
     },
     Person: {
         address: (root: Person) => {
