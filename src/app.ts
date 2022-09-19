@@ -23,10 +23,10 @@ const typeDefs = gql`
 `
 
 type Person =  {
-    name: String
+    name: string
     telefono: string
-    city: String
-    street: String
+    city: string
+    street: string
 }
 
 
@@ -52,6 +52,6 @@ const server = new ApolloServer({
     resolvers
 })
 
-server.listen().then(({ url }) => {
+server.listen({ port: 80 }).then(({ url }) => {
   console.log(`🚀  Server ready at ${url}`);
 });
