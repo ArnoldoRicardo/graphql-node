@@ -1,7 +1,8 @@
 CREATE TABLE IF NOT EXISTS Person (
     id serial NOT NULL PRIMARY KEY
-    , name text
-    , phone VARCHAR(10)
-    , city text
-    , street text
+    , name varchar(100) UNIQUE
+    , phone varchar(10)
+    , city varchar(100)
+    , street varchar(100)
 );
+

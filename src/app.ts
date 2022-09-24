@@ -1,6 +1,11 @@
-import { gql, ApolloServer } from "apollo-server"
-import { testConexion as testPg, personCount, allPerson, findPerson } from './queries'
-
+import { gql, ApolloServer } from 'apollo-server'
+import {
+    testConexion as testPg,
+    personCount,
+    allPerson,
+    findPerson,
+} from './queries'
+import { addPerson, editNumber } from './mutation'
 
 const typeDefs = gql`
     type Address {
@@ -16,19 +21,20 @@ const typeDefs = gql`
 
     type Query {
         personCount: Int!
-        allPerson: [Person]
+        allPerson(hadPhone: Boolean): [Person]
         findPerson(name: String!): Person
         testPg: String!
     }
+    type Mutation {
+        addPerson(
+            name: String!
+            telefono: String!
+            street: String!
+            city: String!
+        ): Person
+        editNumber(name: String!, phone: String!): Person
+    }
 `
-
-type Person =  {
-    name: string
-    telefono: string
-    city: string
-    street: string
-}
-
 
 const resolvers = {
     Query: {
@@ -37,21 +43,25 @@ const resolvers = {
         findPerson,
         testPg,
     },
+    Mutation: {
+        addPerson,
+        editNumber,
+    },
     Person: {
         address: (root: Person) => {
-           return {
-            street: root.street,
-            city: root.city,
+            return {
+                street: root.street,
+                city: root.city,
             }
         },
-    }
+    },
 }
 
 const server = new ApolloServer({
     typeDefs,
-    resolvers
+    resolvers,
 })
 
 server.listen({ port: process.env.PORT }).then(({ url }) => {
-  console.log(`🚀  Server ready at ${url}`);
-});
+    console.log(`🚀  Server ready at ${url}`)
+})
