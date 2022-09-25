@@ -1,6 +1,6 @@
 require('dotenv').config()
 
-require("@babel/register")({
+require('@babel/register')({
   extensions: ['.js', '.ts']
 })
 

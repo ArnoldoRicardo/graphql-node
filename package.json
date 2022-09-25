@@ -1,39 +1,40 @@
 {
-    "name": "graphql-node",
-    "version": "1.0.0",
-    "main": "index.js",
-    "license": "MIT",
-    "scripts": {
-        "dev": "DEV_ENV=true nodemon -e js,ts index.js",
-        "type": "tsc",
-        "start": "node index.js",
-        "build": "babel src --out-dir lib --copy-files --extensions '.ts,.js'"
-    },
-    "prettier": {
-        "printwidth": 120,
-        "trailingComma": "es5",
-        "tabWidth": 4,
-        "semi": false,
-        "singleQuote": true
-    },
-    "dependencies": {
-        "apollo-server": "^3.10.2",
-        "graphql": "^16.6.0",
-        "pg": "^8.8.0"
-    },
-    "devDependencies": {
-        "@babel/cli": "^7.18.10",
-        "@babel/core": "^7.19.1",
-        "@babel/plugin-transform-runtime": "^7.19.1",
-        "@babel/preset-env": "^7.19.1",
-        "@babel/preset-typescript": "^7.18.6",
-        "@babel/register": "^7.18.9",
-        "@types/pg": "^8.6.5",
-        "@types/uuid": "^8.3.4",
-        "dotenv": "^16.0.2",
-        "nodemon": "^2.0.20",
-        "prettier": "^2.7.1",
-        "typescript": "^4.8.3",
-        "uuid": "^9.0.0"
-    }
+  "name": "graphql-node",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "dev": "DEV_ENV=true nodemon -e js,ts index.js",
+    "type": "tsc",
+    "start": "node index.js",
+    "build": "babel src --out-dir lib --copy-files --extensions '.ts,.js'"
+  },
+  "prettier": {
+    "printwidth": 120,
+    "trailingComma": "none",
+    "semi": false,
+    "singleQuote": true
+  },
+  "dependencies": {
+    "apollo-server": "^3.10.2",
+    "graphql": "^16.6.0",
+    "pg": "^8.8.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.18.10",
+    "@babel/core": "^7.19.1",
+    "@babel/plugin-transform-runtime": "^7.19.1",
+    "@babel/preset-env": "^7.19.1",
+    "@babel/preset-typescript": "^7.18.6",
+    "@babel/register": "^7.18.9",
+    "@types/pg": "^8.6.5",
+    "@types/uuid": "^8.3.4",
+    "@typescript-eslint/eslint-plugin": "^5.38.0",
+    "@typescript-eslint/parser": "^5.38.0",
+    "dotenv": "^16.0.2",
+    "eslint": "^8.24.0",
+    "nodemon": "^2.0.20",
+    "prettier": "^2.7.1",
+    "typescript": "^4.8.3"
+  }
 }
