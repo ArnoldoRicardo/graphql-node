@@ -1,6 +1,6 @@
 import { pool } from './db'
 
-export const personCount = async (): Promise<Number> => {
+export const personCount = async (): Promise<Number | undefined> => {
   const sql = `
      --sql
      select count(*) from public.person 
@@ -16,7 +16,10 @@ export const personCount = async (): Promise<Number> => {
   }
 }
 
-export const allPerson = async ({ hadPhone }: allPersonArgs) => {
+export const allPerson = async (
+  root: undefined,
+  { hadPhone }: allPersonArgs
+) => {
   const not = hadPhone ? 'not' : ''
   const sql = `
      --sql
