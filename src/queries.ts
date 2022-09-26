@@ -54,16 +54,10 @@ export const findPerson = async (root: undefined, { name }: findPersonArgs) => {
   }
 }
 
-export const testConexion = async () => {
-  const client = await pool.connect()
-  try {
-    const res = await client.query('SELECT $1::text as message', [
-      'Hello world!'
-    ])
-    return res.rows[0].message
-  } catch (err) {
-    console.log(err)
-  } finally {
-    client.release()
-  }
+export const me = async (
+  root: undefined,
+  args: undefined,
+  { currentUser }: Context
+) => {
+  return currentUser
 }

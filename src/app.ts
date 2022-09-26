@@ -1,11 +1,6 @@
 import { gql, ApolloServer } from 'apollo-server'
-import { findUser } from './db'
-import {
-  testConexion as testPg,
-  personCount,
-  allPerson,
-  findPerson
-} from './queries'
+import { findUser, findFriends } from './services/user'
+import { personCount, allPerson, findPerson, me } from './queries'
 import { addPerson, editNumber, login, createUser } from './mutation'
 import jwt from 'jsonwebtoken'
 
@@ -35,7 +30,6 @@ const typeDefs = gql`
     personCount: Int!
     allPerson(hadPhone: Boolean): [Person]
     findPerson(name: String!): Person
-    testPg: String!
     me: User
   }
   type Mutation {
@@ -56,7 +50,7 @@ const resolvers = {
     personCount,
     allPerson,
     findPerson,
-    testPg
+    me
   },
   Mutation: {
     addPerson,
@@ -70,6 +64,11 @@ const resolvers = {
         street: root.street,
         city: root.city
       }
+    }
+  },
+  User: {
+    friends: async (root: User): Promise<Person[]> => {
+      return await findFriends(root.id)
     }
   }
 }

@@ -1,24 +1,29 @@
-import { pool, findUser } from './db'
+import { pool } from './db'
+import { findUser, addFriendtoUser } from './services/user'
 import bcrypt from 'bcrypt'
 import { UserInputError } from 'apollo-server'
 import jwt from 'jsonwebtoken'
+import { AuthenticationError } from 'apollo-server'
 
 export const addPerson = async (
   root: undefined,
-  { name, phone, city, street }: Person
+  { name, phone, city, street }: Person,
+  { currentUser }: Context
 ) => {
+  if (!currentUser) throw new AuthenticationError('not authenticated')
   const sql = `
      --sql
         INSERT INTO public.person ("name",phone,city,street)
-        VALUES ('${name}','${phone}','${city}','${street}');
+        VALUES ('${name}','${phone}','${city}','${street}')
+        RETURNING *;
     `
   const client = await pool.connect()
   try {
     const res = await client.query(sql)
-    console.log(res)
-    return res.rows[0]
+    const person = res.rows[0]
+    await addFriendtoUser(currentUser.id, person.id)
+    return person
   } catch (err: any) {
-    console.log(err)
     throw new UserInputError(err.message)
   } finally {
     client.release()
@@ -33,15 +38,14 @@ export const editNumber = async (
      --sql
         UPDATE public.person
         SET phone='${phone}'
-        WHERE name in (${name});
+        WHERE name in (${name})
+        RETURNING *;
     `
   const client = await pool.connect()
   try {
     const res = await client.query(sql)
-    console.log(res)
     return res.rows[0]
   } catch (err: any) {
-    console.log(err)
     throw new UserInputError(err.message)
   } finally {
     client.release()
@@ -56,15 +60,13 @@ export const createUser = async (
   const sql_insert = `
          --sql
             INSERT INTO public."User" (username,hasshed_password)
-            VALUES ('${username}','${hasshed_password}');
+            VALUES ('${username}','${hasshed_password}')
+            RETURNING *;
         `
 
-  const sql_select = `select * from public."User" where "username" = '${username}' limit 1`
   const client = await pool.connect()
   try {
-    await client.query(sql_insert)
-    const res = await client.query(sql_select)
-    console.log(res)
+    const res = await client.query(sql_insert)
     return res.rows[0]
   } catch (err: any) {
     console.log(err)
