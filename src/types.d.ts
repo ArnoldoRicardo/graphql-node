@@ -1,21 +1,30 @@
 interface Person {
   name: string
-  telefono: string
+  phone: string
   city: string
   street: string
 }
 
-interface findPersonArgs {
-  name: string
+interface Address {
+  street?: string
+  city?: string
 }
 
-interface editNumberArgs {
-  name: string
-  phone: string
-}
+type findPersonArgs = Pick<Person, 'name'>
+
+type editNumberArgs = Pick<Person, 'name' | 'phone'>
 
 interface allPersonArgs {
   hadPhone: boolean
 }
 
-type rootValue = null
+interface User {
+  id: number
+  username: string
+  password?: string
+  hasshed_password?: string
+}
+
+type userInDb = Required<Omit<User, 'password'>>
+
+type userArgs = Required<Pick<User, 'username' | 'password'>>
