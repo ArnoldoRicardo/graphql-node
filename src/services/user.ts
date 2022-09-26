@@ -22,7 +22,7 @@ export const addFriendtoUser = async (user_id: number, person_id: number) => {
   const client = await pool.connect()
   try {
     const res = await client.query(sql)
-    return res.rows[0]
+    return res.rowCount > 0
   } catch (err: any) {
     throw new UserInputError(err.message)
   } finally {
@@ -47,11 +47,8 @@ export const findFriends = async (user_id: number) => {
   }
 }
 
-export const newUser = async (
-  username: string,
-  hasshed_password: string
-): Promise<userInDb> => {
-  const sql_insert = `
+export const newUser = async (username: string, hasshed_password: string) => {
+  const sql = `
          --sql
             INSERT INTO public."User" (username,hasshed_password)
             VALUES ('${username}','${hasshed_password}')
@@ -60,7 +57,24 @@ export const newUser = async (
 
   const client = await pool.connect()
   try {
-    const res = await client.query(sql_insert)
+    const res = await client.query(sql)
+    return res.rows[0]
+  } catch (err: any) {
+    throw new UserInputError(err.message)
+  } finally {
+    client.release()
+  }
+}
+
+export const checkFriendship = async (user_id: number, person_id: number) => {
+  const sql = `
+    SELECT id FROM public.friends f
+    where user_id in (${user_id}) and person_id in (${person_id})
+  `
+  const client = await pool.connect()
+  try {
+    const res = await client.query(sql)
+    console.log(res)
     return res.rows[0]
   } catch (err: any) {
     throw new UserInputError(err.message)

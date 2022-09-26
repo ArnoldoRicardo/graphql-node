@@ -1,8 +1,15 @@
+import jwt from 'jsonwebtoken'
 import { gql, ApolloServer } from 'apollo-server'
+
 import { findUser, findFriends } from './services/user'
 import { personCount, allPerson, findPerson, me } from './queries'
-import { addPerson, editNumber, login, createUser } from './mutation'
-import jwt from 'jsonwebtoken'
+import {
+  addPerson,
+  editNumber,
+  login,
+  createUser,
+  addAsFriend
+} from './mutation'
 
 const typeDefs = gql`
   type Address {
@@ -60,7 +67,8 @@ const resolvers = {
     addPerson,
     editNumber,
     login,
-    createUser
+    createUser,
+    addAsFriend
   },
   Person: {
     address: (root: Person): Address => {

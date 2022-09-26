@@ -2,8 +2,13 @@ import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import { UserInputError, AuthenticationError } from 'apollo-server'
 
-import { findUser, addFriendtoUser, newUser } from './services/user'
-import { newPerson, updatePersonNumber } from './services/person'
+import {
+  findUser,
+  addFriendtoUser,
+  newUser,
+  checkFriendship
+} from './services/user'
+import { newPerson, updatePersonNumber, getPerson } from './services/person'
 
 export const addPerson = async (
   root: undefined,
@@ -52,5 +57,22 @@ export const login = async (
   const jwt_secret = process.env.JWT_SECRET ? process.env.JWT_SECRET : 'default'
   return {
     value: jwt.sign(user, jwt_secret)
+  }
+}
+
+export const addAsFriend = async (
+  root: undefined,
+  { name }: Pick<Person, 'name'>,
+  { currentUser }: Context
+) => {
+  try {
+    const person = await getPerson(name)
+    const isFriend = await checkFriendship(currentUser.id, person.id)
+    if (isFriend) return currentUser
+    if (await addFriendtoUser(currentUser.id, person.id)) {
+      return findUser(currentUser.username)
+    }
+  } catch (err: any) {
+    throw new UserInputError(err.message)
   }
 }
