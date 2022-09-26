@@ -46,3 +46,25 @@ export const findFriends = async (user_id: number) => {
     client.release()
   }
 }
+
+export const newUser = async (
+  username: string,
+  hasshed_password: string
+): Promise<userInDb> => {
+  const sql_insert = `
+         --sql
+            INSERT INTO public."User" (username,hasshed_password)
+            VALUES ('${username}','${hasshed_password}')
+            RETURNING *;
+        `
+
+  const client = await pool.connect()
+  try {
+    const res = await client.query(sql_insert)
+    return res.rows[0]
+  } catch (err: any) {
+    throw new UserInputError(err.message)
+  } finally {
+    client.release()
+  }
+}

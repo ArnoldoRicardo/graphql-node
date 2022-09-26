@@ -1,18 +1,12 @@
-import { pool } from './db'
+import { UserInputError } from 'apollo-server'
+
+import { countPersons, getAllPerson, getPerson } from './services/person'
 
 export const personCount = async (): Promise<Number | undefined> => {
-  const sql = `
-     --sql
-     select count(*) from public.person 
-    `
-  const client = await pool.connect()
   try {
-    const res = await client.query(sql)
-    return res.rows[0].count
-  } catch (err) {
-    console.log(err)
-  } finally {
-    client.release()
+    return await countPersons()
+  } catch (err: any) {
+    throw new UserInputError(err.message)
   }
 }
 
@@ -20,37 +14,18 @@ export const allPerson = async (
   root: undefined,
   { hadPhone }: allPersonArgs
 ) => {
-  const not = hadPhone ? 'not' : ''
-  const sql = `
-     --sql
-     select * from public.person 
-     where phone is ${not} null
-    `
-  const client = await pool.connect()
   try {
-    const res = await client.query(sql)
-    return res.rows
-  } catch (err) {
-    console.log(err)
-  } finally {
-    client.release()
+    return getAllPerson(hadPhone)
+  } catch (err: any) {
+    throw new UserInputError(err.message)
   }
 }
 
 export const findPerson = async (root: undefined, { name }: findPersonArgs) => {
-  const sql = `
-     --sql
-     select * from public.person where "name" = '${name}' limit 1
-     `
-  const client = await pool.connect()
   try {
-    const res = await client.query(sql)
-    console.log(res)
-    return res.rows[0]
-  } catch (err) {
-    console.log(err)
-  } finally {
-    client.release()
+    return getPerson(name)
+  } catch (err: any) {
+    throw new UserInputError(err.message)
   }
 }
 
